@@ -30,9 +30,10 @@ def get_homework_statuses(current_timestamp):
     params = {'from_date': current_timestamp}
     try:  # pytest не позволяет использовать метод raise_for_status()
         homework_statuses = requests.get(URL, headers=headers, params=params)
-        return homework_statuses.json()
     except requests.RequestException as error:
         return logging.error(error, exc_info=True)
+    else:
+        return homework_statuses.json()
 
 
 def send_message(message, bot_client):
