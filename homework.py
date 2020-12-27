@@ -30,10 +30,9 @@ def get_homework_statuses(current_timestamp):
     params = {'from_date': current_timestamp}
     try:  # pytest не позволяет использовать метод raise_for_status()
         homework_statuses = requests.get(URL, headers=headers, params=params)
+        return homework_statuses.json()
     except requests.RequestException as error:
         return logging.error(error, exc_info=True)
-    else:
-        return homework_statuses.json()
 
 
 def send_message(message, bot_client):
@@ -44,7 +43,7 @@ def main():
     bot_client = telegram.Bot(token=TELEGRAM_TOKEN)
     logging.basicConfig(level=logging.DEBUG)
     logging.debug('Запуск бота-ассистента')
-    current_timestamp = int(time.time())
+    current_timestamp = int(time.time()) - 2592000
 
     while True:
         try:
@@ -63,7 +62,7 @@ def main():
         except Exception as e:
             logging.error(f'Бот столкнулся с ошибкой: {e}')
             send_message('Бот столкнулся с ошибкой', bot_client)
-            break
+            time.sleep(5)
             # не совсем понял зачем выбрасывать ошибку каждые 5 секунд
 
 
