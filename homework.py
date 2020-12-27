@@ -27,6 +27,8 @@ def parse_homework_status(homework):
 
 def get_homework_statuses(current_timestamp):
     headers = {'Authorization': f'OAuth {PRAKTIKUM_TOKEN}'}
+    if current_timestamp is None:
+        current_timestamp = int(time.time())
     params = {'from_date': current_timestamp}
     try:  # pytest не позволяет использовать метод raise_for_status()
         homework_statuses = requests.get(URL, headers=headers, params=params)
@@ -43,7 +45,7 @@ def main():
     bot_client = telegram.Bot(token=TELEGRAM_TOKEN)
     logging.basicConfig(level=logging.DEBUG)
     logging.debug('Запуск бота-ассистента')
-    current_timestamp = int(time.time()) - 2592000
+    current_timestamp = int(time.time())
 
     while True:
         try:
